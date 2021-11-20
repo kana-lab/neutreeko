@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "init_board.c"
+#include "is_game_over.c"
+#include "move_piece.c"
+
 
 int main(int argc, char *argv[]) {
     // 引数の個数をチェック
@@ -27,7 +31,7 @@ int main(int argc, char *argv[]) {
 
 
     // 盤面を初期化(駒を並べる)
-    init_board(board);
+    init_board(board, is_user_first);
 
 
     // ゲームのループをまわし、勝者を決める
