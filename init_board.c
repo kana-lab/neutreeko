@@ -1,3 +1,6 @@
+#ifndef INIT_BOARD
+#define INIT_BOARD
+
 void init_board(int board[5][5], int is_user_first) {
     for (int i = 0; i < 5; ++i)
         for (int j = 0; j < 5; ++j)
@@ -11,3 +14,5 @@ void init_board(int board[5][5], int is_user_first) {
         board[1][2] = board[4][1] = board[4][3] = 1;
     }
 }
+
+#endif

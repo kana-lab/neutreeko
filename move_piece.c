@@ -1,8 +1,14 @@
+// 駒の動かし方を勘違いしていたことにより、修正が必要！
+
+#ifndef MOVE_PIECE
+#define MOVE_PIECE
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 // この書き方提案したけど結構見づらいかも…
+// 代わりにデバッグプリント用の関数を作っとくべき
 //#define DEBUG_MODE
 
 // エラー時にゲームを強制終了させる
@@ -123,4 +129,6 @@ void move_user_piece(int board[5][5]) {
 
 #ifdef DEBUG_MODE
 #undef DEBUG_MODE
+#endif
+
 #endif

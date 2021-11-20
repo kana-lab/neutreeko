@@ -1,3 +1,6 @@
+#ifndef IS_GAME_OVER
+#define IS_GAME_OVER
+
 #include <stdio.h>
 #include <string.h>
 
@@ -55,3 +58,5 @@ int is_game_over(int board[5][5]) {
     }
     return flg;
 }
+
+#endif
