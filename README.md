@@ -3,7 +3,7 @@ IS22erの2班によるボードゲーム「ニュートリーコ」用のAIで�
 
 # これまでの取り決め
 AIの駒を-1、ユーザーの駒を1で表す。  
-座標は以下。("4D"等の文字列と上のXY座標との変換はmove_user_piece関数やmove_ai_piece関数の中で行う)  
+座標は以下。("4D"等の文字列と下のXY座標との変換はmove_user_piece関数やmove_ai_piece関数の中で行う)  
 ![ジオメトリ](https://user-images.githubusercontent.com/79792475/142727582-45234b19-c525-463a-aea4-45e7ef3e4ed7.png)
 
 # AIの取る戦略
