@@ -1,7 +1,7 @@
 // 駒の動かし方を勘違いしていたことにより、修正が必要！
 
-#ifndef MOVE_PIECE
-#define MOVE_PIECE
+#ifndef MOVE_USER_PIECE
+#define MOVE_USER_PIECE
 
 #include <string.h>
 #include <stdio.h>

@@ -3,7 +3,7 @@
 
 #include "init_board.c"
 #include "is_game_over.c"
-#include "move_piece.c"
+#include "move_user_piece.c"
 
 
 int main(int argc, char *argv[]) {

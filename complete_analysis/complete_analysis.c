@@ -1,5 +1,8 @@
 #include "../is_game_over.c"
 
+// このファイルではニュートリーコの完全解析を行うアルゴリズムを実装する
+// 優先度低め
+
 // 3542000通りの盤面が収まれば良いが、念の為大きめに取る
 #define SIZE_OF_SET 4000000
 #define ACTUAL_SIZE 3542000
@@ -85,15 +88,15 @@ void output_almost_win() {
     // いい感じのフォーマットを考えて、almost_win配列をファイル出力する。
 }
 
-int main() {
-    init_all_state();
-    init_arrays();
-
 #define IN_ALMOST_WIN(x) ( \
        almost_win[hash(x)][0] \
     || almost_win[hash(x)][1] \
     || almost_win[hash(x)][2] \
     || almost_win[hash(x)][3])
+
+int main() {
+    init_all_state();
+    init_arrays();
 
     while (is_data_updated) {
         is_data_updated = 0;
@@ -126,6 +129,6 @@ int main() {
     output_almost_win();
 
     return 0;
-
-#undef IN_CHECKED_STATES
 }
+
+#undef IN_ALMOST_WIN
