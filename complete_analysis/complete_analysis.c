@@ -27,14 +27,14 @@ void init_all_state() {
     // 必ず、列挙した盤面の数がACTUAL_SIZEと一致しているかどうかのエラーチェックをすること。
 }
 
-int back_of(int board[5][5], const char *player, int return_array[32][5][5]) {
+int back_of(int board[5][5], const char *player, int return_array[48][5][5]) {
     // 盤面boardについて、playerの一手前の状態として考えられる全ての盤面を
     // return_arrayに入れて、その盤面の個数を戻り値として返す。
     // 盤面の個数は最大でも8 * 3 = 24個になるはず。
     // player引数は"user"か"ai"かのどちらか。
 }
 
-int forward_of(int board[5][5], const char *player, int return_array[32][5][5]) {
+int forward_of(int board[5][5], const char *player, int return_array[48][5][5]) {
     // 盤面boardについて、playerの一手後の状態として考えられる全ての盤面を返す。
     // 以下のようにback_ofをそのまま利用可能。←利用不可！(菊池さんありがとうございます)
     // 盤面の個数は最大でも24個。
@@ -56,7 +56,7 @@ Delta delta_of(int board_before[5][5], int board_after[5][5]) {
 void add_to_almost_win(int board_of_user_turn[5][5]) {
     // 引数board_of_user_turnは、ユーザーが駒を動かす直前であると見た時の盤面である。
     // board_of_user_turnから一手戻した状態全てをalmost_win集合に追加する。
-    int back[32][5][5];
+    int back[48][5][5];
     int back_count = back_of(board_of_user_turn, "ai", back);
     for (int i = 0; i < back_count; ++i) {
         int[4] ptr = almost_win[hash(back[i])];
@@ -108,7 +108,7 @@ int main() {
                 continue;  // stateがchecked_statesに入っていたら戻ってループ継続
 
             // stateからユーザーが次に駒を動かした時に考えられる状態を全列挙
-            int forward[32][5][5];
+            int forward[48][5][5];
             int forward_count = forward_of(state, "user", forward);
 
             // forwardの全てがalmost_win集合に入っているか？
