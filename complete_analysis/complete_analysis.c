@@ -30,7 +30,8 @@ void init_all_state() {
 int back_of(int board[5][5], const char *player, int return_array[48][5][5]) {
     // 盤面boardについて、playerの一手前の状態として考えられる全ての盤面を
     // return_arrayに入れて、その盤面の個数を戻り値として返す。
-    // 盤面の個数は最大でも8 * 3 = 24個になるはず。
+    // 盤面の個数は最大でも8 * 3 = 24個になるはず。←嘘です！！最大48通り
+    // 障害物がないと止まれないので、それも考慮して戻れる盤面を探すこと
     // player引数は"user"か"ai"かのどちらか。
 }
 
