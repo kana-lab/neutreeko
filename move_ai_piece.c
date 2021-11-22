@@ -1,3 +1,9 @@
+
+//
+// このプログラムは使用しない。
+//
+
+/*
 #ifndef MOVE_AI_PIECE
 #define MOVE_AI_PIECE
 
@@ -74,3 +80,4 @@ void move_ai_piece_using_f(int board[5][5]) {
 // main関数中のmove_ai_piece関数の実装はcomplete_analysis.cが完成した後におこなう
 
 #endif
+*/
