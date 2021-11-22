@@ -36,8 +36,8 @@ int back_of(int board[5][5], const char *player, int return_array[32][5][5]) {
 
 int forward_of(int board[5][5], const char *player, int return_array[32][5][5]) {
     // 盤面boardについて、playerの一手後の状態として考えられる全ての盤面を返す。
-    // 以下のようにback_ofをそのまま利用可能。
-    return back_of(board, player, return_array);
+    // 以下のようにback_ofをそのまま利用可能。←利用不可！(菊池さんありがとうございます)
+    // 盤面の個数は最大でも24個。
 }
 
 typedef struct {
@@ -86,6 +86,7 @@ void init_arrays() {
 
 void output_almost_win() {
     // いい感じのフォーマットを考えて、almost_win配列をファイル出力する。
+    // 単にalmost_winの中の0~4を文字の0~4に変換してテキストファイルに吐き出すだけでも良いかも
 }
 
 #define IN_ALMOST_WIN(x) ( \
