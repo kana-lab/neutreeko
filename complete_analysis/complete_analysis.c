@@ -60,7 +60,7 @@ void add_to_almost_win(int board_of_user_turn[5][5]) {
     int back[48][5][5];
     int back_count = back_of(board_of_user_turn, "ai", back);
     for (int i = 0; i < back_count; ++i) {
-        int[4] ptr = almost_win[hash(back[i])];
+        int *ptr = almost_win[hash(back[i])];
         if (!ptr[0] && !ptr[1] && !ptr[2] && !ptr[3]) {
             Delta d = delta_of(back[i], board_of_user_turn);
             ptr[0] = d.from_x;
@@ -103,7 +103,7 @@ int main() {
     while (is_data_updated) {
         is_data_updated = 0;
         for (ull i = 0; i < ACTUAL_SIZE; ++i) {
-            int[5][5] state = all_state[i];  // 盤面の取りうる全ての状態を列挙
+            int (*state)[5] = all_state[i];  // 盤面の取りうる全ての状態を列挙
 
             if (checked_states[hash(state)])
                 continue;  // stateがchecked_statesに入っていたら戻ってループ継続
