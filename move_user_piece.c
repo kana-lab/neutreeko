@@ -134,7 +134,7 @@ void move_piece(int board[5][5], const char *player, Delta d) {
             abort_game(player);
         }
     } else {  // 変な動きをしている
-        debug_print("in move_piece: movement against the game logic");
+        debug_print("in move_piece: movement against the game logic.");
         abort_game(player);
     }
 

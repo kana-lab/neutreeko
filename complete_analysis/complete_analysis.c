@@ -90,7 +90,7 @@ void output_almost_win() {
     // 単にalmost_winの中の0~4を文字の0~4に変換してテキストファイルに吐き出すだけでも良いかも
 
     char filename[32] = "perfect_move.dat";
-    FILE *fp;
+    FILE *fp;;
 
     // ファイルオープン (エラー時にファイル名の再入力を促す)
     while ((fp = fopen(filename, "w")) == NULL) {
