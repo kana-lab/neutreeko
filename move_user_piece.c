@@ -15,6 +15,7 @@ void debug_print(const char *msg, ...) {
     va_start(ap, msg);
     vprintf(msg, ap);
     puts("");
+    fflush(stdin);
     va_end(ap);
 #endif
 }

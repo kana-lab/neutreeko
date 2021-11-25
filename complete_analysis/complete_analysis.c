@@ -88,6 +88,24 @@ void init_arrays() {
 void output_almost_win() {
     // いい感じのフォーマットを考えて、almost_win配列をファイル出力する。
     // 単にalmost_winの中の0~4を文字の0~4に変換してテキストファイルに吐き出すだけでも良いかも
+
+    char filename[32] = "perfect_move.dat";
+    FILE *fp;
+
+    // ファイルオープン (エラー時にファイル名の再入力を促す)
+    while ((fp = fopen(filename, "w")) == NULL) {
+        printf("could not open the file \"%s\"\n", filename);
+        puts("please specify a new filename:");
+        memset(filename, 0, 32);
+        scanf("%31s", filename);
+    }
+
+    // 数字をテキストに変換して出力
+    for (ull i = 0; i < ACTUAL_SIZE; ++i)
+        for (int j = 0; j < 4; ++j)
+            fputc('0' + almost_win[i][j], fp);
+
+    fclose(fp);
 }
 
 #define IN_ALMOST_WIN(x) ( \
