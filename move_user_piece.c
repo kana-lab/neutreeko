@@ -1,23 +1,29 @@
-// 駒の動かし方を勘違いしていたことにより、修正が必要！
-
 #ifndef MOVE_USER_PIECE
 #define MOVE_USER_PIECE
 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
-// この書き方提案したけど結構見づらいかも…
-// 代わりにデバッグプリント用の関数を作っとくべき
-//#define DEBUG_MODE
+#define DEBUG_MODE  // デバッグ時以外は定義しないこと
+
+
+void debug_print(const char *msg, ...) {
+#ifdef DEBUG_MODE
+    va_list ap;
+    va_start(ap, msg);
+    vprintf(msg, ap);
+    puts("");
+    va_end(ap);
+#endif
+}
 
 // エラー時にゲームを強制終了させる
 // loser引数には"user"か"ai"を指定する
 // その値によって, You LoseかYou Winが表示される
 void abort_game(const char *loser) {
-#ifdef DEBUG_MODE
-    puts("abort called");
-#endif
+    debug_print("abort called");
     if (!strcmp(loser, "user")) {
         puts("You Lose");
     } else if (!strcmp(loser, "ai")) {
@@ -29,77 +35,108 @@ void abort_game(const char *loser) {
 // 盤面boardにおいて, board[from_x][from_y]にあるplayerの駒をboard[to_x][to_y]に動かす
 // player引数には"user"か"ai"を指定する(それ以外が指定されたときはエラーとなるので注意)
 // ゲームロジックに反した動きを指定した場合はplayerの負けとなり, ゲームが強制終了する
-void move_piece(int board[5][5], const char *player, int from_x, int from_y, int to_x, int to_y) {
-    int piece;
+//void move_piece(int board[5][5], const char *player, int from_x, int from_y, int to_x, int to_y) {
+//    int piece;
+//
+//    if (!strcmp(player, "user")) {
+//        piece = 1;
+//    } else if (!strcmp(player, "ai")) {
+//        piece = -1;
+//    } else {  // ERROR
+//        puts("in function move_piece: invalid value of the parameter player");
+//        exit(1);
+//    }
+//
+//    if (from_x < 0 || 4 < from_x || from_y < 0 || 4 < from_y
+//        || to_x < 0 || 4 < to_x || to_y < 0 || 4 < to_y) {
+//#ifdef DEBUG_MODE
+//        puts("in move_piece: index out of range");
+//#endif
+//        abort_game(player);  // index out of range
+//    }
+//
+//    const int delta_x = to_x - from_x;
+//    const int delta_y = to_y - from_y;
+//
+//    if (!(-1 <= delta_x && delta_x <= 1 && -1 <= delta_y && delta_y <= 1)
+//        || delta_x == 0 && delta_y == 0) {
+//#ifdef DEBUG_MODE
+//        puts("in move_piece: movement against the game logic");
+//#endif
+//        abort_game(player);  // movement against the game logic
+//    }
+//
+//    if (board[from_x][from_y] != piece || board[to_x][to_y] != 0) {
+//#ifdef DEBUG_MODE
+//        puts("the specified place is filled");
+//#endif
+//        abort_game(player);  // cannot move the piece
+//    }
+//
+//    board[from_x][from_y] = 0;
+//    board[to_x][to_y] = piece;
+//}
+
+typedef struct {
+    int from_x;
+    int from_y;
+    int to_x;
+    int to_y;
+} Delta;
+
+// 盤面boardにおいて, board[d.from_x][d.from_y]にあるplayerの駒をboard[d.to_x][d.to_y]に動かす
+// player引数には"user"か"ai"を指定する (それ以外が指定されたときはエラーとなるので注意)
+// ゲームロジックに反した動きを指定した場合はplayerの負けとなり, ゲームが強制終了する
+void move_piece(int board[5][5], const char *player, Delta d) {
+    int piece;  // 動かす駒の数字 (1または-1)
 
     if (!strcmp(player, "user")) {
         piece = 1;
     } else if (!strcmp(player, "ai")) {
         piece = -1;
-    } else {  // ERROR
-        puts("in function move_piece: invalid value of the parameter player");
+    } else {
+        debug_print("in function move_piece: invalid value of the parameter player");
         exit(1);
     }
 
-    if (from_x < 0 || 4 < from_x || from_y < 0 || 4 < from_y
-        || to_x < 0 || 4 < to_x || to_y < 0 || 4 < to_y) {
-#ifdef DEBUG_MODE
-        puts("in move_piece: index out of range");
-#endif
-        abort_game(player);  // index out of range
+#define OUT_OF_RANGE(x) (x < 0 || 4 < x)
+
+    // 指定された座標が0~4に収まっているか？
+    if (OUT_OF_RANGE(d.from_x) || OUT_OF_RANGE(d.from_y)
+        || OUT_OF_RANGE(d.to_x) || OUT_OF_RANGE(d.to_y)) {
+        debug_print("in move_piece: index out of range");
+        abort_game(player);
     }
 
-    const int delta_x = to_x - from_x;
-    const int delta_y = to_y - from_y;
+#undef OUT_OF_RANGE
 
-    if (!(-1 <= delta_x && delta_x <= 1 && -1 <= delta_y && delta_y <= 1)
-        || delta_x == 0 && delta_y == 0) {
-#ifdef DEBUG_MODE
-        puts("in move_piece: movement against the game logic");
-#endif
-        abort_game(player);  // movement against the game logic
+    // 移動元の座標にplayerの駒があるか？ 移動先の座標は空いているか？
+    if (board[d.from_x][d.from_y] != piece || board[d.to_x][d.to_y] != 0) {
+        debug_print("in move_piece: the specified place is filled");
+        abort_game(player);
     }
 
-    if (board[from_x][from_y] != piece || board[to_x][to_y] != 0) {
-#ifdef DEBUG_MODE
-        puts("the specified place is filled");
-#endif
-        abort_game(player);  // cannot move the piece
-    }
-
-    board[from_x][from_y] = 0;
-    board[to_x][to_y] = piece;
+    // 移動がゲームロジックに反していないか？
 }
 
 void move_user_piece(int board[5][5]) {
-    int from_x, from_y;
-    int to_x, to_y;
-
+    // ユーザーからの入力をオーバーフロー対策をしつつ受ける
+    // 入力は4文字ジャストでないとダメ
     char buf[32] = {};
     if (fgets(buf, 32, stdin) == NULL || strlen(buf) != 5) {
-#ifdef DEBUG_MODE
-        puts("in move_user_piece: invalid input");
-#endif
+        debug_print("in move_user_piece: invalid input");
         abort_game("user");
     }
 
-    from_x = 5 - (buf[0] - '0');
-    from_y = buf[1] - 'A';
-    to_x = 5 - (buf[2] - '0');
-    to_y = buf[3] - 'A';
+    // 受け取った座標を内部的な座標に変換
+    Delta d = {
+            .from_x = 5 - (buf[0] - '0'),
+            .from_y = buf[1] - 'A',
+            .to_x = 5 - (buf[2] - '0'),
+            .to_y = buf[3] - 'A',
+    };
 
-#define INVALID(x) (x < 0 || 4 < x)
-
-    if (INVALID(from_x) || INVALID(from_y) || INVALID(to_x) || INVALID(to_y)) {
-#ifdef DEBUG_MODE
-        puts("in move_user_piece: geometry out of range");
-#endif
-        abort_game("user");
-    }
-
-#undef INVALID
-
-    move_piece(board, "user", from_x, from_y, to_x, to_y);
+    move_piece(board, "user", d);
 }
 
 
@@ -127,8 +164,5 @@ void move_user_piece(int board[5][5]) {
 //    return 0;
 //}
 
-#ifdef DEBUG_MODE
-#undef DEBUG_MODE
-#endif
 
 #endif
