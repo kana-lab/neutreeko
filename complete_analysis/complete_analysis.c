@@ -1,7 +1,8 @@
 #include "../is_game_over.c"
 
+//
 // このファイルではニュートリーコの完全解析を行うアルゴリズムを実装する
-// 優先度低め
+//
 
 // 3542000通りの盤面が収まれば良いが、念の為大きめに取る
 #define SIZE_OF_SET 4000000
@@ -18,7 +19,7 @@ int all_state[SIZE_OF_SET][5][5];  // 800MB, 全ての盤面を列挙して入�
 
 ull hash(int board[5][5]) {
     // boardに対応する番号(ハッシュ)をunsigned long long型で返す。
-    // 番号は最大で25C6 * 6C3 = 3542000となるはず。
+    // 番号は最大で25C6 * 6C3 - 1 = 3541999となるはず。
 }
 
 void init_all_state() {
@@ -80,6 +81,11 @@ void init_arrays() {
             checked_states[i] = 1;
             if (kind == -1) {  // 盤面iはAIの勝利である
                 add_to_almost_win(all_state[i]);
+
+                // 2021/11/26(金)追記
+                // AIの勝利である盤面Gについてはalmost_win[hash(G)]には5を入れておく
+                for (int j = 0; j < 4; ++j)
+                    almost_win[i][j] = 5;
             }
         }
     }
@@ -141,7 +147,7 @@ int main() {
             add_to_almost_win(state);
             is_data_updated = 1;
 
-            // forwardの全てはalmost_winに入っているわけではない場合
+            // forwardの全てがalmost_win集合に入っているわけではない場合
             LOOP_CONTINUE:;
         }
     }
