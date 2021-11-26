@@ -37,25 +37,9 @@ ull hash(int board[5][5]) {
     // 番号は最大で25C6 * 6C3 - 1 = 3541999となるはず。
 }
 
-void init_all_state() {
-    // 考えうる全ての盤面を列挙し、all_state配列に格納する。
-    // 盤面Gは、all_state[hash(G)]に(コピーして)入れる。
-    // 必ず、列挙した盤面の数がACTUAL_SIZEと一致しているかどうかのエラーチェックをすること。
-}
-
-int back_of(int board[5][5], const char *player, int return_array[48][5][5]) {
-    // 盤面boardについて、playerの一手前の状態として考えられる全ての盤面を
-    // return_arrayに入れて、その盤面の個数を戻り値として返す。
-    // 盤面の個数は最大でも8 * 3 = 24個になるはず。←嘘です！！最大48通り
-    // 障害物がないと止まれないので、それも考慮して戻れる盤面を探すこと
-    // player引数は"user"か"ai"かのどちらか。
-}
-
-int forward_of(int board[5][5], const char *player, int return_array[48][5][5]) {
-    // 盤面boardについて、playerの一手後の状態として考えられる全ての盤面を返す。
-    // 以下のようにback_ofをそのまま利用可能。←利用不可！(菊池さんありがとうございます)
-    // 盤面の個数は最大でも24個。
-}
+#include "init_all_state.c"
+#include "back_of.c"
+#include "forward_of.c"
 
 typedef struct {
     int from_x;
