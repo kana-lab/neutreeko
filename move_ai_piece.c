@@ -29,17 +29,17 @@ void load_almost_win() {
     fclose(fp);
 }
 
-#define IN_ALMOST_WIN(x) ( \
-       almost_win[hash(x)][0] \
-    || almost_win[hash(x)][1] \
-    || almost_win[hash(x)][2] \
-    || almost_win[hash(x)][3])
+#define IN_ALMOST_WIN(board_hash) ( \
+       almost_win[board_hash][0] \
+    || almost_win[board_hash][1] \
+    || almost_win[board_hash][2] \
+    || almost_win[board_hash][3])
 
 void move_ai_piece(int board[5][5]) {
-    // boardからhashを計算する
-    // もしalmost_win[hash(board)]が存在すれば、そこに書かれているとおりに駒を動かす
+    // boardからhashを計算し、これをboard_hashとする
+    // もしalmost_win[board_hash]が存在すれば、そこに書かれているとおりに駒を動かす
     // 駒を動かすにはmove_piece関数を利用せよ
-    // almost_win[hash(board)]の存在チェックにはIN_ALMOST_WIN(board)マクロを利用せよ
+    // almost_win[board_hash]の存在チェックにはIN_ALMOST_WIN(board_hash)マクロを利用せよ
     // 動かしたら、その動きを"4E5D"等の文字列に変換してプリントせよ
     // もしalmost_win[hash(board)]が存在しなければ、forward_of関数を利用してAIの一手先を全列挙
     // そうして得た各盤面に『マイナス1を掛け』、相手と自分の立場を入れ替えて、相手の勝利までの
