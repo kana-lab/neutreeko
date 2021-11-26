@@ -22,8 +22,9 @@ typedef unsigned long long ull;
  *     盤面Gを既にチェックしてある場合には、checked_states[hash(G)]は1であり、そうでなければ0。
  *     初期値はいずれかのプレイヤーが勝利している盤面と、不正な盤面の全て。
  * is_data_updated
- *     TrueかFalseの真偽値を取り、checked_states集合やalmost_win集合に更新があったか否かを示す。
- *     初期値はTrue。
+ *     TrueかFalseの真偽値を取り、almost_win集合に更新があったか否かを示す。初期値はTrue。
+ *     以下のプログラムでは、is_data_updatedは整数であるから、もののついでにalmost_winに
+ *     どれだけの回数追加があったかを入れている。
  *******************************************************************************************/
 int almost_win[SIZE_OF_SET][5];  // 160MB, 各要素には駒の移動元/移動先の座標、及び最長ステップ数を入れる
 int checked_states[SIZE_OF_SET];  // 32MB, 個々の要素には1または0を入れ、TrueとFalseを表現
@@ -46,9 +47,12 @@ typedef struct {
 #include "delta_of.c"
 
 
-void add_to_almost_win(int board_of_user_turn[5][5], int step) {
+int add_to_almost_win(int board_of_user_turn[5][5], int step) {
     // 引数board_of_user_turnは、ユーザーが駒を動かす直前であると見た時の盤面である。
     // board_of_user_turnから一手戻した状態全てをalmost_win集合に追加する。
+
+    int add_count = 0;
+
     int back[48][5][5];
     int back_count = back_of(board_of_user_turn, "ai", back);
     for (int i = 0; i < back_count; ++i) {
@@ -60,8 +64,11 @@ void add_to_almost_win(int board_of_user_turn[5][5], int step) {
             ptr[2] = d.to_x;
             ptr[3] = d.to_y;
             ptr[4] = step;
+            ++add_count;
         }
     }
+
+    return add_count;
 }
 
 // almost_win集合とchecked_states集合を初期化する
@@ -114,9 +121,14 @@ void output_almost_win() {
     || almost_win[hash(x)][3])
 
 int main() {
+    printf("initializing various arrays...");
+
     init_combination();
     init_all_state();
     init_arrays();
+
+    puts("done");
+    puts("analyzing the game...");
 
     int longest_step = 1;
 
@@ -142,15 +154,21 @@ int main() {
 
             // forwardの全てがalmost_win集合に入っている場合
             checked_states[hash(state)] = 1;
-            add_to_almost_win(state, longest_step);
-            is_data_updated = 1;
+            is_data_updated += add_to_almost_win(state, longest_step);
 
             // forwardの全てがalmost_win集合に入っているわけではない場合
             LOOP_CONTINUE:;
         }
+
+        printf("1 loop is finished. update: %d\n", is_data_updated);
     }
 
+    puts("all analysis is finished.");
+    printf("writing the result to a file...");
+
     output_almost_win();
+
+    puts("done");
 
     return 0;
 }
