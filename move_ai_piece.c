@@ -13,7 +13,7 @@ int almost_win[ACTUAL_SIZE][5];
 
 
 void load_almost_win() {
-    const char *filename = "perfect_move.dat";
+    const char *filename = "complete_analysis/perfect_move.dat";
     FILE *fp = fopen(filename, "r");
 
     if (fp == NULL) {
