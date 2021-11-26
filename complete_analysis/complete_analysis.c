@@ -32,12 +32,6 @@ int is_data_updated = 1;
 int all_state[SIZE_OF_SET][5][5];  // 800MB, 全ての盤面を列挙して入れておく
 
 
-#include "hash.c"
-#include "init_all_state.c"
-#include "back_of.c"
-#include "forward_of.c"
-
-
 typedef struct {
     int from_x;
     int from_y;
@@ -45,11 +39,12 @@ typedef struct {
     int to_y;
 } Delta;
 
-Delta delta_of(int board_before[5][5], int board_after[5][5]) {
-    // 盤面board_beforeとboard_afterを受け取って、駒がどの座標からどの座標へ動いたかを返す
-    // ただし、board_beforeとboard_afterの差異は、駒1つが一手分動いただけの差であるとする
-    // エラーチェックは余裕があれば…
-}
+#include "hash.c"
+#include "init_all_state.c"
+#include "back_of.c"
+#include "forward_of.c"
+#include "delta_of.c"
+
 
 void add_to_almost_win(int board_of_user_turn[5][5], int step) {
     // 引数board_of_user_turnは、ユーザーが駒を動かす直前であると見た時の盤面である。
