@@ -50,6 +50,7 @@ typedef struct {
 int add_to_almost_win(int board_of_user_turn[5][5], int step) {
     // 引数board_of_user_turnは、ユーザーが駒を動かす直前であると見た時の盤面である。
     // board_of_user_turnから一手戻した状態全てをalmost_win集合に追加する。
+    // almost_winに新たに追加された状態の数を戻り値として返す。
 
     int add_count = 0;
 
@@ -114,11 +115,11 @@ void output_almost_win() {
     fclose(fp);
 }
 
-#define IN_ALMOST_WIN(x) ( \
-       almost_win[hash(x)][0] \
-    || almost_win[hash(x)][1] \
-    || almost_win[hash(x)][2] \
-    || almost_win[hash(x)][3])
+#define IN_ALMOST_WIN(board_hash) ( \
+       almost_win[board_hash][0] \
+    || almost_win[board_hash][1] \
+    || almost_win[board_hash][2] \
+    || almost_win[board_hash][3])
 
 int main() {
     printf("initializing various arrays...");
@@ -132,11 +133,8 @@ int main() {
     puts("analyzing the game...");
     fflush(stdout);
 
-    int longest_step = 1;
-
     while (is_data_updated) {
         is_data_updated = 0;
-        ++longest_step;
 
         for (ull i = 0; i < ACTUAL_SIZE; ++i) {
             int (*state)[5] = all_state[i];  // 盤面の取りうる全ての状態を列挙
@@ -148,15 +146,19 @@ int main() {
             int forward[48][5][5];
             int forward_count = forward_of(state, "user", forward);
 
-            // forwardの全てがalmost_win集合に入っているか？
+            // forwardの全てがalmost_win集合に入っているか？ (ついでに勝利までの最長ステップ数も求める)
+            int longest_step = 0;
             for (int j = 0; j < forward_count; ++j) {
-                if (!IN_ALMOST_WIN(forward[j]))
+                ull forward_hash = hash(forward[j]);
+                if (!IN_ALMOST_WIN(forward_hash))
                     goto LOOP_CONTINUE;
+                if (longest_step < almost_win[forward_hash][4])
+                    longest_step = almost_win[forward_hash][4];
             }
 
             // forwardの全てがalmost_win集合に入っている場合
             checked_states[hash(state)] = 1;
-            is_data_updated += add_to_almost_win(state, longest_step);
+            is_data_updated += add_to_almost_win(state, longest_step + 1);
 
             // forwardの全てがalmost_win集合に入っているわけではない場合
             LOOP_CONTINUE:;
