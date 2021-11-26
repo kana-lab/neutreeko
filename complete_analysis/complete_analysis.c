@@ -122,6 +122,7 @@ void output_almost_win() {
 
 int main() {
     printf("initializing various arrays...");
+    fflush(stdout);
 
     init_combination();
     init_all_state();
@@ -129,6 +130,7 @@ int main() {
 
     puts("done");
     puts("analyzing the game...");
+    fflush(stdout);
 
     int longest_step = 1;
 
@@ -161,14 +163,17 @@ int main() {
         }
 
         printf("1 loop is finished. update: %d\n", is_data_updated);
+        fflush(stdout);
     }
 
     puts("all analysis is finished.");
     printf("writing the result to a file...");
+    fflush(stdout);
 
     output_almost_win();
 
     puts("done");
+    fflush(stdout);
 
     return 0;
 }
