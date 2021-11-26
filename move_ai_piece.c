@@ -9,6 +9,7 @@ int almost_win[ACTUAL_SIZE][5];
 
 #include "move_user_piece.c"
 #include "complete_analysis/hash.c"
+#include "complete_analysis/forward_of.c"
 
 
 void load_almost_win() {
