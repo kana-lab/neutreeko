@@ -32,14 +32,11 @@ int is_data_updated = 1;
 int all_state[SIZE_OF_SET][5][5];  // 800MB, 全ての盤面を列挙して入れておく
 
 
-ull hash(int board[5][5]) {
-    // boardに対応する番号(ハッシュ)をunsigned long long型で返す。
-    // 番号は最大で25C6 * 6C3 - 1 = 3541999となるはず。
-}
-
+#include "hash.c"
 #include "init_all_state.c"
 #include "back_of.c"
 #include "forward_of.c"
+
 
 typedef struct {
     int from_x;
