@@ -10,7 +10,22 @@
 
 typedef unsigned long long ull;
 
-int almost_win[SIZE_OF_SET][4];  // 128MB, 4つの要素には駒の移動元の座標、移動先の座標を入れる
+
+/*******************************************************************************************
+ * almost_win
+ *     盤面をAIが駒を動かす直前の状態であると見た時に、AIの勝ちが確定しているような盤面の集合。
+ *     以下の定義から分かるとおり、盤面Gに対して、almost_win[hash(G)]には5個の整数を入れることが
+ *     出来るが、最初の2個には盤面Gから次にAIが動かす駒の座標を、次の2個には駒の移動先の座標を、
+ *     そして最後の1個にはAIが勝利するまでの最長ステップ数を入れる。
+ * checked_states
+ *     すでにチェックした盤面を入れておいて二度調べるのを防ぐという役割を果たす。
+ *     盤面Gを既にチェックしてある場合には、checked_states[hash(G)]は1であり、そうでなければ0。
+ *     初期値はいずれかのプレイヤーが勝利している盤面と、不正な盤面の全て。
+ * is_data_updated
+ *     TrueかFalseの真偽値を取り、checked_states集合やalmost_win集合に更新があったか否かを示す。
+ *     初期値はTrue。
+ *******************************************************************************************/
+int almost_win[SIZE_OF_SET][5];  // 160MB, 各要素には駒の移動元/移動先の座標、及び最長ステップ数を入れる
 int checked_states[SIZE_OF_SET];  // 32MB, 個々の要素には1または0を入れ、TrueとFalseを表現
 int is_data_updated = 1;
 
@@ -55,7 +70,7 @@ Delta delta_of(int board_before[5][5], int board_after[5][5]) {
     // エラーチェックは余裕があれば…
 }
 
-void add_to_almost_win(int board_of_user_turn[5][5]) {
+void add_to_almost_win(int board_of_user_turn[5][5], int step) {
     // 引数board_of_user_turnは、ユーザーが駒を動かす直前であると見た時の盤面である。
     // board_of_user_turnから一手戻した状態全てをalmost_win集合に追加する。
     int back[48][5][5];
@@ -68,6 +83,7 @@ void add_to_almost_win(int board_of_user_turn[5][5]) {
             ptr[1] = d.from_y;
             ptr[2] = d.to_x;
             ptr[3] = d.to_y;
+            ptr[4] = step;
         }
     }
 }
@@ -80,7 +96,7 @@ void init_arrays() {
         if (kind != 0) {  // 盤面iは勝敗がついているか、もしくは不正な盤面
             checked_states[i] = 1;
             if (kind == -1) {  // 盤面iはAIの勝利である
-                add_to_almost_win(all_state[i]);
+                add_to_almost_win(all_state[i], 1);
 
                 // 2021/11/26(金)追記
                 // AIの勝利である盤面Gについてはalmost_win[hash(G)]には5を入れておく
@@ -107,9 +123,10 @@ void output_almost_win() {
     }
 
     // 数字をテキストに変換して出力
-    for (ull i = 0; i < ACTUAL_SIZE; ++i)
-        for (int j = 0; j < 4; ++j)
-            fputc('0' + almost_win[i][j], fp);
+    for (ull i = 0; i < ACTUAL_SIZE; ++i) {
+        int *ptr = almost_win[i];
+        fprintf(fp, "%d %d %d %d %d\n", ptr[0], ptr[1], ptr[2], ptr[3], ptr[4]);
+    }
 
     fclose(fp);
 }
@@ -124,8 +141,12 @@ int main() {
     init_all_state();
     init_arrays();
 
+    int longest_step = 1;
+
     while (is_data_updated) {
         is_data_updated = 0;
+        ++longest_step;
+
         for (ull i = 0; i < ACTUAL_SIZE; ++i) {
             int (*state)[5] = all_state[i];  // 盤面の取りうる全ての状態を列挙
 
@@ -144,7 +165,7 @@ int main() {
 
             // forwardの全てがalmost_win集合に入っている場合
             checked_states[hash(state)] = 1;
-            add_to_almost_win(state);
+            add_to_almost_win(state, longest_step);
             is_data_updated = 1;
 
             // forwardの全てがalmost_win集合に入っているわけではない場合
