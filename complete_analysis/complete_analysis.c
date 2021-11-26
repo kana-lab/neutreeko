@@ -122,6 +122,7 @@ void output_almost_win() {
     || almost_win[hash(x)][3])
 
 int main() {
+    init_combination();
     init_all_state();
     init_arrays();
 

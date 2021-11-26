@@ -35,6 +35,10 @@ int main(int argc, char *argv[]) {
     init_board(board, is_user_first);
 
 
+    // AIのデータの読み込み
+    load_almost_win();
+
+
     // ゲームのループをまわし、勝者を決める
     int winner;
     if (is_user_first) {
