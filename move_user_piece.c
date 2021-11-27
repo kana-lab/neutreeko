@@ -167,14 +167,16 @@ void move_user_piece(int board[5][5]) {
 
 
 // below are for debug
-//void print_board(int board[5][5]) {
-//    for (int i = 0; i < 5; ++i) {
-//        for (int j = 0; j < 5; ++j)
-//            printf("%d ", board[i][j]);
-//        puts("");
-//    }
-//}
-//
+void print_board(int board[5][5]) {
+#ifdef DEBUG_MODE
+    for (int i = 0; i < 5; ++i) {
+        for (int j = 0; j < 5; ++j)
+            printf("%d ", board[i][j]);
+        puts("");
+    }
+#endif
+}
+
 //int main() {
 //    int board[5][5] = {
 //            {0, 1,  0,  1,  0},
