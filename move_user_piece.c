@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-//#define DEBUG_MODE  // デバッグ時以外は定義しないこと
-
 
 void debug_print(const char *msg, ...) {
 #ifdef DEBUG_MODE
@@ -167,11 +165,11 @@ void move_user_piece(int board[5][5]) {
 
 
 // below are for debug
-void print_board(int board[5][5]) {
+void print_board_for_debug(int board[5][5]) {
 #ifdef DEBUG_MODE
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j)
-            printf("%d ", board[i][j]);
+            printf("%d ", board[i][j] == -1 ? 2 : board[i][j]);
         puts("");
     }
 #endif
@@ -186,7 +184,7 @@ void print_board(int board[5][5]) {
 //            {0, -1, 0,  -1, 0}
 //    };
 //    for (;;) {
-//        print_board(board);
+//        print_board_for_debug(board);
 //        move_user_piece(board);
 //    }
 //    return 0;

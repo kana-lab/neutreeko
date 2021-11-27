@@ -4,6 +4,7 @@
 typedef unsigned long long ull;
 
 #define ACTUAL_SIZE 3542000
+#define INFINITY 10000000
 
 int almost_win[ACTUAL_SIZE][5];
 
@@ -51,7 +52,8 @@ void display_movement(Delta d) {
 int user_step_to_win(int board_of_user_turn[5][5]) {
     // board_of_user_turnはユーザーが駒を動かす直前の盤面
     // ユーザーの勝ちが確定している時に、あと何ステップで勝利するのかを返す
-    // ユーザーの勝ちが確定していない盤面が渡された場合はエラーメッセージを出す
+    // ユーザーの勝ちが確定していない盤面が渡された場合はエラーメッセージを出し、INFINITYを返す
+    // その場合は恐らく千日手かと思われる
 
     int state[5][5];
 
@@ -61,8 +63,10 @@ int user_step_to_win(int board_of_user_turn[5][5]) {
             state[i][j] = board_of_user_turn[i][j] * -1;
 
     ull hash_of_state = hash(state);
-    if (!IN_ALMOST_WIN(hash_of_state))
-        debug_print("in user_step_to_win: state * -1 is NOT in almost_win.");
+    if (!IN_ALMOST_WIN(hash_of_state)) {
+        // debug_print("in user_step_to_win: state * -1 is NOT in almost_win.");
+        return INFINITY;
+    }
 
     return almost_win[hash_of_state][4];
 }
@@ -93,6 +97,8 @@ void move_ai_piece(int board[5][5]) {
 
     ull board_hash = hash(board);
     if (IN_ALMOST_WIN(board_hash)) {  // AIの必勝状態の場合
+        debug_print("STEP TO AI\'s WIN: %d", almost_win[board_hash][4]);
+
         Delta d = {
                 .from_x=almost_win[board_hash][0],
                 .from_y=almost_win[board_hash][1],
@@ -113,6 +119,10 @@ void move_ai_piece(int board[5][5]) {
             if (longest_step < step)
                 longest_step = step;
         }
+
+        // 千日手の警告
+        if (longest_step == INFINITY)
+            debug_print("[Notice] AI can cause SENNICHITE.");
 
         // 最長ステップ数が最大となる盤面をこれに入れる
         int state_of_max_step[48][5][5];

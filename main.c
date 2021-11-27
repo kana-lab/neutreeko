@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define DEBUG_MODE  // デバッグ時以外はコメントアウトすること！
+
 #include "init_board.c"
 #include "is_game_over.c"
 #include "move_user_piece.c"
@@ -43,11 +45,13 @@ int main(int argc, char *argv[]) {
     int winner;
     if (is_user_first) {
         for (int i = 0; i < 300; i += 2) {  // 300手以内
+            print_board_for_debug(board);
             move_user_piece(board);  // ユーザー入力を受けて駒を動かす
             if ((winner = is_game_over(board))) {
                 break;
             }
 
+            print_board_for_debug(board);
             move_ai_piece(board);  // AIの判断を受けて駒を動かす
             if ((winner = is_game_over(board))) {
                 break;
@@ -55,11 +59,13 @@ int main(int argc, char *argv[]) {
         }
     } else {
         for (int i = 0; i < 300; i += 2) {
+            print_board_for_debug(board);
             move_ai_piece(board);
             if ((winner = is_game_over(board))) {
                 break;
             }
 
+            print_board_for_debug(board);
             move_user_piece(board);
             if ((winner = is_game_over(board))) {
                 break;
