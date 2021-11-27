@@ -10,6 +10,7 @@ int almost_win[ACTUAL_SIZE][5];
 #include "move_user_piece.c"
 #include "complete_analysis/hash.c"
 #include "complete_analysis/forward_of.c"
+#include "complete_analysis/delta_of.c"
 
 
 void load_almost_win() {
@@ -36,15 +37,12 @@ void load_almost_win() {
     || almost_win[board_hash][3])
 
 void move_ai_piece(int board[5][5]) {
-    // boardからhashを計算し、これをboard_hashとする
-    // もしalmost_win[board_hash]が存在すれば、そこに書かれているとおりに駒を動かす
+    // githubのREADMEの一番下に書いてあるアルゴリズムを実装する
     // 駒を動かすにはmove_piece関数を利用せよ
-    // almost_win[board_hash]の存在チェックにはIN_ALMOST_WIN(board_hash)マクロを利用せよ
-    // 動かしたら、その動きを"4E5D"等の文字列に変換してプリントせよ
-    // もしalmost_win[hash(board)]が存在しなければ、forward_of関数を利用してAIの一手先を全列挙
-    // そうして得た各盤面に『マイナス1を掛け』、相手と自分の立場を入れ替えて、相手の勝利までの
-    // 最長ステップ数をalmost_win[hash(board_forward)][4]によりチェックする
-    // 最長ステップ数が最も大きいような動き方を選択してAIの駒を動かす
+    // almost_win[board_hash]の存在チェックにはIN_ALMOST_WIN(board_hash)関数を利用せよ
+    // 一手先の盤面の列挙にはforward_of関数を利用せよ
+    // 2つの盤面から駒の動きを求めるにはdelta_of関数を利用せよ
+    // 駒を動かしたら、その動きを"5C3E"等の文字列に変換しプリントせよ
 }
 
 #undef IN_ALMOST_WIN
