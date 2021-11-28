@@ -24,7 +24,6 @@ ull hash(int board[5][5]) {
     int r = 3; // 残りの1の個数
     int s = 3; // 残りの-1の個数
     ull board_hash = 0;
-    init_combination();
 
     for (int i = 0; i < 25; i++, n--){
         if (board[i/5][i%5]==1){
