@@ -9,7 +9,7 @@ typedef unsigned long long ull;
 int almost_win[ACTUAL_SIZE][5];
 
 #include "move_user_piece.c"
-#include "complete_analysis/hash.c"
+#include "complete_analysis/hash.c"  // hashを使うなら必ずinit_combination()をすること！！
 #include "complete_analysis/forward_of.c"
 #include "complete_analysis/delta_of.c"
 

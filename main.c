@@ -41,6 +41,11 @@ int main(int argc, char *argv[]) {
     load_almost_win();
 
 
+    // move_ai_piece.cの中でhash()関数を使っているので、
+    // init_combination()を呼び出さないといけない！
+    init_combination();
+
+
     // ゲームのループをまわし、勝者を決める
     int winner;
     if (is_user_first) {
