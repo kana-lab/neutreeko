@@ -43,7 +43,7 @@ int is_game_over(int board[5][5]) {
                             }
                         }
                     }
-                    if ((i < 3) && (j > 3)) { // 斜め左
+                    if ((i < 3) && (j > 1)) { // 斜め左
                         if ((board[i + 1][j - 1] == arr[k]) && (board[i + 2][j - 2] == arr[k])) {
                             if (flg == 0) {
                                 flg = arr[k];
