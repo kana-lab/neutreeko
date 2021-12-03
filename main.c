@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define DEBUG_MODE  // デバッグ時以外はコメントアウトすること！
+//#define DEBUG_MODE  // デバッグ時以外はコメントアウトすること！
 
 #include "init_board.c"
 #include "is_game_over.c"
